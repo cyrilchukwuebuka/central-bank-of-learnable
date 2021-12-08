@@ -1,0 +1,31 @@
+{
+  "name": "central-bank-of-learnable",
+  "version": "1.0.0",
+  "description": "The Central Bank of Learnable is trying to set up a platform for their banking services to make online banking seemless for their customers.",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest",
+    "start": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cyrilchukwuebuka/central-bank-of-learnable.git"
+  },
+  "author": "Cyril Chukwuebuka Muofunanya",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/cyrilchukwuebuka/central-bank-of-learnable/issues"
+  },
+  "homepage": "https://github.com/cyrilchukwuebuka/central-bank-of-learnable#readme",
+  "dependencies": {
+    "bcrypt": "^5.0.1",
+    "cors": "^2.8.5",
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "helmet": "^4.6.0",
+    "mongodb": "^4.2.1",
+    "mongoose": "^6.1.0",
+    "morgan": "^1.10.0",
+    "nodemon": "^2.0.14"
+  }
+}

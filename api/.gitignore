@@ -1,0 +1,6 @@
+# Don't track these items
+node_modules/
+.data/users
+.data/admin
+.data/transactions
+.env
