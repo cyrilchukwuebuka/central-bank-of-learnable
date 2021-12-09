@@ -33,6 +33,10 @@ const AdminSchema = new mongoose.Schema({
         require: true,
         min: 6
     },
+    date: {
+        type: Date,
+        default: Date.now
+    },
     isAdmin: {
         type: Boolean,
         default: true

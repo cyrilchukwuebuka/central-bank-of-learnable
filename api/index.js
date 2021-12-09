@@ -20,13 +20,14 @@ const port = 8800
 
 //middlewares
 app.use(express.json());
+// app.use(express.urlencoded({ extended: true}))
 app.use(cors());
 app.use(helmet());
 app.use(morgan('dev'));
 
 app.use('/', homeRoute);
 // app.use('/admin', adminRoute);
-// app.use('/auth', authRoute);
+app.use('/auth', authRoute);
 // app.use('/user', userRoute);
 
 // Mongoose and Server start up
