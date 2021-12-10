@@ -25,10 +25,10 @@ app.use(cors());
 app.use(helmet());
 app.use(morgan('dev'));
 
-app.use('/', homeRoute);
-// app.use('/admin', adminRoute);
-app.use('/auth', authRoute);
-// app.use('/user', userRoute);
+app.use('/api/', homeRoute);
+app.use('/api/admin', adminRoute);
+app.use('/api/auth', authRoute);
+// app.use('/api/user', userRoute);
 
 // Mongoose and Server start up
 mongoose.connect(process.env.MONGODB_URL,

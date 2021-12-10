@@ -1,3 +1,4 @@
+const { string } = require('joi');
 const mongoose = require('mongoose');
 
 const UserSchema = new mongoose.Schema({
@@ -27,24 +28,24 @@ const UserSchema = new mongoose.Schema({
         max: 50,
         unique: true
     },
+    tel: {
+        type: String,
+        required: true,
+        min: 10,
+    },
     password: {
         type: String,
         require: true,
         min: 6
-    },
-    isAdmin: {
-        type: Boolean,
-        default: true
     },
     date: {
         type: Date,
         default: Date.now
     },
     account: {
-        type: Number,
+        type: String,
         required: true,
         min: 10,
-        default: ''
     },
     credit: {
         type: Array,

@@ -3,7 +3,6 @@ const mongoose = require('mongoose');
 const AdminSchema = new mongoose.Schema({
     username: {
         type: String,
-        require: true,
         min: 3,
         max: 20,
         unique: true
@@ -33,6 +32,11 @@ const AdminSchema = new mongoose.Schema({
         require: true,
         min: 6
     },
+    tel: {
+        type: String,
+        required: true,
+        min: 10,
+    },
     date: {
         type: Date,
         default: Date.now
@@ -42,6 +46,10 @@ const AdminSchema = new mongoose.Schema({
         default: true
     },
     accounts: {
+        type: Array,
+        default: []
+    },
+    disabledAccounts: {
         type: Array,
         default: []
     }
