@@ -12,15 +12,13 @@ const UserSchema = new mongoose.Schema({
         type: String,
         required: true,
         min: 3,
-        max: 20,
-        unique: true
+        max: 20
     },
     lastName: {
         type: String,
         required: true,
         min: 3,
-        max: 20,
-        unique: true
+        max: 20
     },
     email: {
         type: String,
@@ -42,10 +40,19 @@ const UserSchema = new mongoose.Schema({
         type: Date,
         default: Date.now
     },
+    balance:{
+        type: Number,
+        default: 0
+    },
     account: {
         type: String,
         required: true,
         min: 10,
+        unique: true
+    },
+    isAccountDisabled: {
+        type: Boolean,
+        default: false
     },
     credit: {
         type: Array,

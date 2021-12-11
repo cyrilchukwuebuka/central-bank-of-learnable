@@ -1,3 +1,7 @@
+/**
+ * @param {number} accountLength 
+ * @returns number
+ */
 const generateAccount = (accountLength = 10) => {
     let accountNo = []
 

@@ -28,7 +28,7 @@ app.use(morgan('dev'));
 app.use('/api/', homeRoute);
 app.use('/api/admin', adminRoute);
 app.use('/api/auth', authRoute);
-// app.use('/api/user', userRoute);
+app.use('/api/user', userRoute);
 
 // Mongoose and Server start up
 mongoose.connect(process.env.MONGODB_URL,

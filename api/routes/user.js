@@ -1,6 +1,16 @@
-const user = {}
+const router = require('express').Router();
+const User = require('../models/User');
+const {
+    adminRegistrationValidation,
+    loginValidation,
+    adminAccess
+} = require('../utility/validation');
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 
-module.exports = user
+
+
+module.exports = router
 
 /**
  * Deposit money

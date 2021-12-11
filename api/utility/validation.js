@@ -1,6 +1,10 @@
 const Joi = require('joi');
 const jwt = require('jsonwebtoken');
 
+/**
+ * @param {object} data 
+ * @returns boolean
+ */
 const userRegistrationValidation = (data) => {
     const schema = Joi.object({
         username: Joi.string().min(3).required(),
@@ -13,6 +17,11 @@ const userRegistrationValidation = (data) => {
 
     return schema.validate(data);
 }
+
+/**
+ * @param {object} data
+ * @returns boolean
+ */
 const adminRegistrationValidation = (data) => {
     const schema = Joi.object({
         firstName: Joi.string().min(3).required(),
@@ -25,6 +34,10 @@ const adminRegistrationValidation = (data) => {
     return schema.validate(data);
 }
 
+/**
+ * @param {object} data
+ * @returns boolean
+ */
 const loginValidation = (data) => {
     const schema = Joi.object({
         email: Joi.string().min(6).required().email(),
@@ -34,6 +47,12 @@ const loginValidation = (data) => {
     return schema.validate(data)
 }
 
+/**
+ * @param {*} req 
+ * @param {*} res 
+ * @param {*} next 
+ * @returns 
+ */
 const userAccess = (req, res, next) => {
     // fetch the token from the request header
     const token = res.header('authentication-token');
@@ -52,6 +71,12 @@ const userAccess = (req, res, next) => {
     }
 }
 
+/**
+ * @param {*} req 
+ * @param {*} res 
+ * @param {*} next 
+ * @returns 
+ */
 const adminAccess = (req, res, next) => {
     // fetch the token from the request header
     const token = req.header('authentication-token');

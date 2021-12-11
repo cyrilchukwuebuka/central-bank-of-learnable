@@ -49,6 +49,12 @@ const AdminSchema = new mongoose.Schema({
         type: Array,
         default: []
     },
+    adminID: {
+        type: Number,
+        default: 0,
+        required: true,
+        unique: true
+    },
     disabledAccounts: {
         type: Array,
         default: []

@@ -7,6 +7,8 @@ const {
 } = require('../utility/validation');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const Admin = require('../models/Admin');
+const generateAccount = require('../utility/generateAccount');
 
 // user login route
 router.post('/login', async (req, res) => {
@@ -30,41 +32,60 @@ router.post('/login', async (req, res) => {
     
         // creating and assigning token
         const token = jwt.sign({_id: user._id}, process.env.AUTH_TOKEN_SECRET);
-        res.header('authentication-token', token).json(token)
+        res.header('authentication-token', token).send(token);
     } catch(err){
         console.log(err)
     }
 })
 
 // user registration route
-router.post('/register', async (req, res) => {
-    // console.log(req.admin)
-    const { error } = userRegistrationValidation(req.body)
-    if (error) {
-        return res.status(400).json(error.details[0].message);
-    }
-
-    // check for existence in the MongoDb database
-    const emailExists = await User.findOne({email: req.body.email});
-    if (emailExists) {
-        return res.status(400).json('Email already in the User database');
-    }
-
-    const salt = bcrypt.genSaltSync(10);
-    const hashedPassword = bcrypt.hashSync(req.body.password, salt);
-
-    const user = new User({
-        ...req.body,
-        password: hashedPassword
-    })
+router.post('/register', adminAccess, async (req, res) => {
+    if(req.admin) {
+        const { error } = userRegistrationValidation(req.body)
+        if (error) {
+            return res.status(400).json(error.details[0].message);
+        }
     
-    try {
-        //saving the newly created user
-        const savedUser = await user.save();
-        res.status(200).json(savedUser)
-    } catch (err) {
-        console.log(err);
-        res.status(400).json(err)
+        // check for existence User and Admin in the MongoDb database
+        let admin = null;
+        let userExists = null;
+        
+        await Promise.all([Admin.findOne({ _id: req.admin._id }), User.findOne({ email: req.body.email })])
+        .then(values => {
+            admin = values[0];
+            userExists = values[1];
+        })
+
+        if (userExists) {
+            return res.status(400).json('Email already in the User database');
+        }
+
+        let userAccount = generateAccount()
+
+        while (admin.accounts.includes(userAccount)){
+            userAccount = generateAccount()
+        }
+    
+        const salt = bcrypt.genSaltSync(10);
+        const hashedPassword = bcrypt.hashSync(req.body.password, salt);
+    
+        const user = new User({
+            ...req.body,
+            password: hashedPassword,
+            account: userAccount
+        })
+        
+        try {
+            //saving the newly created user and adding the account to admin list of accounts
+            const savedUser = await user.save();
+            const savedAdmin = await admin.updateOne({ $push: { accounts: userAccount } })
+            res.status(200).json({savedAdmin, savedUser})
+        } catch (err) {
+            console.log(err);
+            res.status(400).json(err)
+        }
+    } else {
+        return res.status(400).json('You\'re not an Admin')
     }
 })
 
