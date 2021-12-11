@@ -31,7 +31,7 @@ router.post('/login', async (req, res) => {
         }
     
         // creating and assigning token
-        const token = jwt.sign({_id: user._id}, process.env.AUTH_TOKEN_SECRET);
+        const token = jwt.sign({_id: user._id, user: true}, process.env.AUTH_TOKEN_SECRET);
         res.header('authentication-token', token).send(token);
     } catch(err){
         console.log(err)
@@ -40,7 +40,7 @@ router.post('/login', async (req, res) => {
 
 // user registration route
 router.post('/register', adminAccess, async (req, res) => {
-    if(req.admin) {
+    if (req.admin.admin) {
         const { error } = userRegistrationValidation(req.body)
         if (error) {
             return res.status(400).json(error.details[0].message);

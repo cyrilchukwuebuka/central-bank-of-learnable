@@ -4,7 +4,8 @@ const User = require('../models/User');
 const {
     adminRegistrationValidation,
     loginValidation,
-    adminAccess
+    adminAccess,
+    userAccess
 } = require('../utility/validation');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
@@ -31,7 +32,7 @@ router.post('/', async (req, res) => {
         }
 
         // creating and assigning token
-        const token = jwt.sign({ _id: admin._id }, process.env.AUTH_TOKEN_SECRET);
+        const token = jwt.sign({ _id: admin._id, admin: true }, process.env.AUTH_TOKEN_SECRET);
         res.header('authentication-token', token).send(token);
     } catch (err) {
         res.status(500).json(err);
@@ -71,7 +72,7 @@ router.post('/register', async (req, res) => {
 
 // fetch list of all registered users
 router.get('/users', adminAccess, async (req, res) => {
-    if (req.admin) {
+    if (req.admin.admin) {
         try {
             // Get the admin from the database
             const admin = await Admin.findOne({ _id: req.admin._id });
@@ -94,24 +95,43 @@ router.get('/users', adminAccess, async (req, res) => {
 })
 
 // deletes a specified user
-// router.post('/delete/:userAccount', adminAccess, async (req, res) => {
-//     if (req.admin) {
-//         try {
-//             const user = await User.find({ account: req.params.userAccount })
-//             console.log(user)
-//             const deletedUser = await User.deleteOne({_id: user._id})
-//             return res.status(200).json(deletedUser);
-//         } catch (err) {
-//             res.status(500).json(err);
-//         }
-//     } else {
-//         return res.status(400).json('You\'re not an Admin')
-//     }
-// })
+router.delete('/delete/:userAccount', adminAccess, async (req, res) => {
+    if (req.admin.admin) {
+        try {
+            // fetches the admin from the database
+            const admin = await Admin.findOne({ _id: req.admin._id });
+
+            // Delete user and remove from list of accounts
+            const user = await User.findOneAndDelete({ account: req.params.userAccount })
+
+            // remove the user account from the database
+            admin.accounts.includes(Number(req.params.userAccount))
+                && await admin.updateOne({
+                    $pull: {
+                        accounts
+                            : Number(req.params.userAccount)
+                    }
+                })
+
+            admin.disabledAccounts.includes(Number(req.params.userAccount))
+                && await admin.updateOne({
+                    $pull: {
+                        disabledAccounts
+                            : Number(req.params.userAccount)
+                    }
+                })
+            res.status(200).send(`User ${req.params.userAccount} has been deleted`);
+        } catch (err) {
+            res.status(500).json(err);
+        }
+    } else {
+        return res.status(400).json('You\'re not an Admin')
+    }
+})
 
 // reverses transaction made
 // router.post('/reverse-transaction/:transactionID', adminAccess, async (req, res) => {
-//     if (req.admin) {
+//     if (req.admin.admin) {
 //         try {
 
 //         } catch (err) {
@@ -124,7 +144,7 @@ router.get('/users', adminAccess, async (req, res) => {
 
 // disables a user account
 router.put('/deactivate-account/:userAccount', adminAccess, async (req, res) => {
-    if (req.admin) {
+    if (req.admin.admin) {
         try {
             // fetches the admin and user from the database
             const admin = await Admin.findOne({ _id: req.admin._id });
@@ -151,7 +171,7 @@ router.put('/deactivate-account/:userAccount', adminAccess, async (req, res) => 
 
 // reactivate disabled user account
 router.put('/reactivate-account/:userAccount', adminAccess, async (req, res) => {
-    if (req.admin) {
+    if (req.admin.admin) {
         try {
             // fetches the admin and user from the database
             const admin = await Admin.findOne({ _id: req.admin._id });
@@ -181,7 +201,7 @@ module.exports = router
 /**
  * can add users <This function is to be solved at the auth register route> --- DONE
  * can get all users --- DONE
- * can delete user
+ * can delete user --- DONE
  * reverse transaction(transfer)
- * Disable User's account
+ * Disable User's account --- DONE
  */
