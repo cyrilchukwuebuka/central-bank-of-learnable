@@ -98,6 +98,34 @@ router.post('/transfer', userAccess, async (req, res) => {
             return res.status(400).send('Enter a valid deposit amount')
         }
 
+        // get the current signed in user and decrease the amount
+        try {
+            const validUser = await User.findOne({ _id: req.user._id });
+
+            // check if user's account is active
+            if (validUser.isAccountDisabled) {
+                return res.status(400).send('The User\'s account is deactivated')
+            }
+
+            // update user's account balance
+            await validUser.updateOne({ balance: validUser.balance - Number(amount) })
+
+            // get debit transaction model and store in the database
+            const debitTransaction = getDebitTransactionModel(validUser, Number(amount), validUser);
+            await Transaction.findOneAndUpdate(
+                { _id: req.transaction._id },
+                {
+                    $push: {
+                        debits: debitTransaction
+                    }
+                }
+            )
+            await validUser.updateOne({ $push: { debit: debitTransaction } })
+            res.status(200).send('Amount withrawn sucessfully')
+        } catch (err) {
+            res.status(500).send(err)
+        }
+
     } else {
         res.status(400).send('You\'re not an authenticated user')
     }
