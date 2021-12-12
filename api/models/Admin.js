@@ -45,15 +45,21 @@ const AdminSchema = new mongoose.Schema({
         type: Boolean,
         default: true
     },
-    accounts: {
-        type: Array,
-        default: []
-    },
-    adminID: {
+    transactionId: {
         type: Number,
         default: 0,
         required: true,
         unique: true
+    },
+    // adminId: {
+    //     type: Number,
+    //     default: 0,
+    //     unique: true,
+    //     required: true
+    // },
+    accounts: {
+        type: Array,
+        default: []
     },
     disabledAccounts: {
         type: Array,

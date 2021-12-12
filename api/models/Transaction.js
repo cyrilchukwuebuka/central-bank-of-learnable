@@ -1,11 +1,15 @@
 const mongoose = require('mongoose');
 
 const TransactionSchema = new mongoose.Schema({
+    transactionId: {
+        type: Number,
+        required: true,
+        unique: true
+    },
     adminId: {
         type: Number,
         required: true,
-        unique: true,
-        default: 0
+        unique: true
     },
     credits: {
         type: Array,

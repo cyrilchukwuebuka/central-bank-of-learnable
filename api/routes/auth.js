@@ -8,7 +8,7 @@ const {
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const Admin = require('../models/Admin');
-const generateAccount = require('../utility/generateAccount');
+const generateRandomNumber = require('../utility/generateRandomNumber');
 
 // user login route
 router.post('/login', async (req, res) => {
@@ -60,10 +60,10 @@ router.post('/register', adminAccess, async (req, res) => {
             return res.status(400).json('Email already in the User database');
         }
 
-        let userAccount = generateAccount()
+        let userAccount = generateRandomNumber()
 
         while (admin.accounts.includes(userAccount)){
-            userAccount = generateAccount()
+            userAccount = generateRandomNumber()
         }
     
         const salt = bcrypt.genSaltSync(10);

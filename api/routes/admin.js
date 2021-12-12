@@ -4,11 +4,12 @@ const User = require('../models/User');
 const {
     adminRegistrationValidation,
     loginValidation,
-    adminAccess,
-    userAccess
+    adminAccess
 } = require('../utility/validation');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const Transaction = require('../models/Transaction');
+const generateRandomNumber = require('../utility/generateRandomNumber')
 
 // login as an Admin
 router.post('/', async (req, res) => {
@@ -55,14 +56,30 @@ router.post('/register', async (req, res) => {
     const salt = bcrypt.genSaltSync(10);
     const hashedPassword = bcrypt.hashSync(req.body.password, salt);
 
+    // generate transactionId, check whether it alrady exist and add to model
+    let transactionId = generateRandomNumber(20)
+    const transactionExist = await Transaction.findOne({ transactionId: transactionId})
+    while(transactionExist) {
+        transactionId = generateRandomNumber(20)
+        transactionExist = await Transaction.findOne({ transactionId: transactionId })
+    }
+
+    // create new transaction and admin model
+    const transactionModel = new Transaction({
+        transactionId : transactionId
+    })
+
     const admin = new Admin({
         ...req.body,
-        password: hashedPassword
+        password: hashedPassword,
+        transactionId: transactionId
     })
 
     try {
-        //saving the newly created admin
+        //saving the newly created Admin and Transaction Model
+        await transactionModel.save();
         const savedAdmin = await admin.save();
+        console.log('hello')
         res.status(200).json(savedAdmin)
     } catch (err) {
         console.log(err);

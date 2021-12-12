@@ -24,6 +24,7 @@ const userRegistrationValidation = (data) => {
  */
 const adminRegistrationValidation = (data) => {
     const schema = Joi.object({
+        username: Joi.string().min(3).required(),
         firstName: Joi.string().min(3).required(),
         lastName: Joi.string().min(3).required(),
         email: Joi.string().min(6).required().email(),
@@ -48,9 +49,9 @@ const loginValidation = (data) => {
 }
 
 /**
- * @param {*} req 
- * @param {*} res 
- * @param {*} next 
+ * @param {object} req 
+ * @param {object} res 
+ * @param {Function} next 
  * @returns 
  */
 const userAccess = (req, res, next) => {
@@ -72,10 +73,10 @@ const userAccess = (req, res, next) => {
 }
 
 /**
- * @param {*} req 
- * @param {*} res 
- * @param {*} next 
- * @returns 
+ * @param {object} req
+ * @param {object} res
+ * @param {Function} next
+ * @returns
  */
 const adminAccess = (req, res, next) => {
     // fetch the token from the request header
