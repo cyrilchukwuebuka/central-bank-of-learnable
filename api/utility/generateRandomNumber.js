@@ -1,5 +1,5 @@
 /**
- * @param {number} accountLength 
+ * @param {number} numberLength 
  * @returns number
  */
 const generateRandomNumber = (numberLength = 10) => {

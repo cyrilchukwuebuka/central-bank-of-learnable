@@ -56,15 +56,16 @@ const loginValidation = (data) => {
  */
 const userAccess = (req, res, next) => {
     // fetch the token from the request header
-    const token = res.header('authentication-token');
-    if(!token){
+    const token = req.header('authentication-token');
+    if (!token) {
         return res.status(400).json('Access denied!')
     }
 
     // verify the user
-    try{
+    try {
         const verifiedUser = jwt.verify(token, process.env.AUTH_TOKEN_SECRET);
-        req.user = verifiedUser;
+        req.user = { _id: verifiedUser._id, user: verifiedUser.user };
+        req.transactionId = verifiedUser.transactionId;
         console.log(verifiedUser)
         next()
     } catch (err) {
@@ -88,16 +89,17 @@ const adminAccess = (req, res, next) => {
     // verify the admin
     try {
         const verifiedAdmin = jwt.verify(token, process.env.AUTH_TOKEN_SECRET);
-        req.admin = verifiedAdmin;
+        req.admin = { _id: verifiedAdmin._id, admin: verifiedAdmin.admin };
+        req.transactionId = verified.transactionId;
         next()
     } catch (err) {
         console.log(err)
     }
 }
 
-module.exports = { 
+module.exports = {
     adminRegistrationValidation,
-    userRegistrationValidation, 
+    userRegistrationValidation,
     loginValidation,
     userAccess,
     adminAccess
