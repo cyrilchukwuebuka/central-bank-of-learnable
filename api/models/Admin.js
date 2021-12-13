@@ -51,12 +51,6 @@ const AdminSchema = new mongoose.Schema({
         required: true,
         unique: true
     },
-    // adminId: {
-    //     type: Number,
-    //     default: 0,
-    //     unique: true,
-    //     required: true
-    // },
     accounts: {
         type: Array,
         default: []

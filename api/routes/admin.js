@@ -33,7 +33,11 @@ router.post('/', async (req, res) => {
         }
 
         // creating and assigning token
-        const token = jwt.sign({ _id: admin._id, admin: true }, process.env.AUTH_TOKEN_SECRET);
+        const token = jwt.sign({ _id: admin._id, 
+            admin: true,
+            transaction: admin.transactionId
+        }, 
+            process.env.AUTH_TOKEN_SECRET);
         res.header('authentication-token', token).send(token);
     } catch (err) {
         res.status(500).json(err);
@@ -58,15 +62,15 @@ router.post('/register', async (req, res) => {
 
     // generate transactionId, check whether it alrady exist and add to model
     let transactionId = generateRandomNumber(20)
-    const transactionExist = await Transaction.findOne({ transactionId: transactionId})
-    while(transactionExist) {
+    const transactionExist = await Transaction.findOne({ transactionId: transactionId })
+    while (transactionExist) {
         transactionId = generateRandomNumber(20)
         transactionExist = await Transaction.findOne({ transactionId: transactionId })
     }
 
     // create new transaction and admin model
     const transactionModel = new Transaction({
-        transactionId : transactionId
+        transactionId: transactionId
     })
 
     const admin = new Admin({
@@ -146,18 +150,63 @@ router.delete('/delete/:userAccount', adminAccess, async (req, res) => {
     }
 })
 
-// reverses transaction made
-// router.post('/reverse-transaction/:transactionID', adminAccess, async (req, res) => {
-//     if (req.admin.admin) {
-//         try {
+// reverse transaction
+router.post('/reverse-transaction/:transactionID', adminAccess, async (req, res) => {
+    if (req.admin.admin) {
+        try {
+            // fetches the admin from the database
+            const admin = await Admin.findOne({ _id: req.admin._id });
 
-//         } catch (err) {
-//             res.status(500).json(err);
-//         }
-//     } else {
-//         return res.status(400).json('You\'re not an Admin')
-//     }
-// })
+            // Get transaction details from Transaction Model
+            const transaction = await Transaction.findOne({ transactionId: admin.transactionId });
+            const transactionArray = transaction.credits.concat(...transaction.debits)
+            const transactionObj = transactionArray.filter(transaction => transaction.id === req.params.transactionID)
+
+            // extract the sender and receiver object
+            let senderObj = null
+            let receiverObj = null
+            let amount = null
+            if( typeof transactionObj === 'object'){
+                senderObj = transactionObj.sender;
+                receiverObj = transactionObj.receiver;
+                amount = transactionObj.amount
+            } else {
+                senderObj = transactionObj[0].sender;
+                receiverObj = transactionObj[0].receiver;
+                amount = transactionObj[0].amount
+            }
+
+            // get sender and receiver model
+            const values = await Promise.all([
+                User.findOne({ account: senderObj.account.toString() }),
+                User.findOne({ account: receiverObj.account.toString() })
+            ])
+
+            const sender = values[0];
+            const receiver = values[1];
+            const transactionId = Date.now()
+
+            // get debit and credit transaction model and store in the database
+            const creditTransaction = getTransactionObject(sender, amount, receiver, 'CREDIT', transactionId);
+            const debitTransaction = getTransactionObject(receiver, amount, sender, 'DEBIT', transactionId);
+
+            // reversing the transaction
+            await Promise.all([
+                transaction.updateOne({ $push: { debits: debitTransaction } }),
+                transaction.updateOne({ $push: { credits: creditTransaction } }),
+                sender.updateOne({ balance: sender.balance + amount }),
+                receiver.updateOne({ balance: receiver.balance - amount }),
+                sender.updateOne({ $push: { credit: creditTransaction } }),
+                receiver.updateOne({ $push: { debit: debitTransaction } })
+            ])
+
+        } catch (err) {
+            res.status(500).json(err);
+        }
+    } else {
+        return res.status(400).json('You\'re not an Admin')
+    }
+})
 
 // disables a user account
 router.put('/deactivate-account/:userAccount', adminAccess, async (req, res) => {

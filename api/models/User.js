@@ -30,6 +30,7 @@ const UserSchema = new mongoose.Schema({
         type: String,
         required: true,
         min: 10,
+        unique: true
     },
     password: {
         type: String,
@@ -41,6 +42,10 @@ const UserSchema = new mongoose.Schema({
         default: Date.now
     },
     balance:{
+        type: Number,
+        default: 0
+    },
+    transactionId: {
         type: Number,
         default: 0
     },

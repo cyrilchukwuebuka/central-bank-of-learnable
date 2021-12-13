@@ -6,11 +6,6 @@ const TransactionSchema = new mongoose.Schema({
         required: true,
         unique: true
     },
-    adminId: {
-        type: Number,
-        required: true,
-        unique: true
-    },
     credits: {
         type: Array,
         default: []
