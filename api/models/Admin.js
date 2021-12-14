@@ -46,8 +46,7 @@ const AdminSchema = new mongoose.Schema({
         default: true
     },
     transactionId: {
-        type: Number,
-        default: 0,
+        type: String,
         required: true,
         unique: true
     },

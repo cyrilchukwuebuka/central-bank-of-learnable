@@ -90,7 +90,7 @@ const adminAccess = (req, res, next) => {
     try {
         const verifiedAdmin = jwt.verify(token, process.env.AUTH_TOKEN_SECRET);
         req.admin = { _id: verifiedAdmin._id, admin: verifiedAdmin.admin };
-        req.transactionId = verified.transactionId;
+        req.transactionId = verifiedAdmin.transactionId;
         next()
     } catch (err) {
         console.log(err)

@@ -1,11 +1,11 @@
 const mongoose = require('mongoose');
 
 const TransactionSchema = new mongoose.Schema({
-    transactionId: {
-        type: Number,
-        required: true,
-        unique: true
-    },
+    // transactionId: {
+    //     type: Number,
+    //     required: true,
+    //     unique: true
+    // },
     credits: {
         type: Array,
         default: []

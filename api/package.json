@@ -4,8 +4,14 @@
   "description": "The Central Bank of Learnable is trying to set up a platform for their banking services to make online banking seemless for their customers.",
   "main": "index.js",
   "scripts": {
-    "test": "jest",
+    "test": "jest --watch",
     "start": "nodemon index.js"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "coveragePathIgnorePatterns": [
+      "/node_modules/"
+    ]
   },
   "repository": {
     "type": "git",
@@ -29,5 +35,9 @@
     "mongoose": "^6.1.0",
     "morgan": "^1.10.0",
     "nodemon": "^2.0.14"
+  },
+  "devDependencies": {
+    "jest": "^27.4.5",
+    "supertest": "^6.1.6"
   }
 }
