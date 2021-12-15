@@ -15,12 +15,15 @@ module.exports = async (req, res) => {
     if (req.admin.admin) {
         try {
             // fetches the admin from the database
+            console.log(typeof req.transactionId)
             const admin = await Admin.findOne({ _id: req.admin._id });
-            console.log(req.transactionId)
 
+            const transactionId = req.transactionId.toString()
+            console.log(transactionId)
             // Get transaction details from Transaction Model
-            const transaction = await Transaction.findOne({ 'transactionId': req.transactionId.toString() })
+            const transaction = await Transaction.findOne({ 'transactionId': transactionId.toString() })
             // const transaction = await Transaction.findOne({ _id: '61b59e1a371ebf4a268f6119' })
+            console.log(admin)
             console.log(transaction)
             // const transactionArray = transaction.credits.concat(...transaction.debits)
             // const transactionObj = transactionArray.find(transaction => +transaction.id === +req.params.transactionID)

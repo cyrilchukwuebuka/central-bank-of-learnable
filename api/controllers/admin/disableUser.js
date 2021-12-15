@@ -6,9 +6,10 @@ module.exports = async (req, res) => {
         try {
             // fetches the admin and user from the database
             const admin = await Admin.findOne({ _id: req.admin._id });
-            const user = !admin.disabledAccounts.includes(req.params.userAccount) &&
+            const user = !admin.disabledAccounts.includes(Number(req.params.userAccount)) &&
                 await User.findOne({ account: req.params.userAccount });
 
+            console.log(user)
             // deactivates user
             await user.updateOne({ isAccountDisabled: true })
             await admin.updateOne({
@@ -18,7 +19,7 @@ module.exports = async (req, res) => {
                 }
             })
 
-            res.status(200).json(`The account ${req.params.userAccount} has been disabled`)
+            res.status(200).json(`The account ${req.params.userAccount} has been deactivated`)
         } catch (err) {
             res.status(500).json(err);
         }

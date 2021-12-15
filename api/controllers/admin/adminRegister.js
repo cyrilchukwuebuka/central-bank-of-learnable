@@ -21,37 +21,32 @@ module.exports = async (req, res) => {
     const salt = bcrypt.genSaltSync(10);
     const hashedPassword = bcrypt.hashSync(req.body.password, salt);
 
-    // // generate transactionId, check whether it alrady exist and add to model
-    // let transactionId = generateRandomNumber(20)
-    // const transactionExist = await Transaction.findOne({ transactionId: transactionId })
-    // while (transactionExist) {
-    //     transactionId = generateRandomNumber(20)
-    //     transactionExist = await Transaction.findOne({ transactionId: transactionId })
-    // }
-
+    // generate transactionId, check whether it alrady exist and add to model
+    let transactionId = generateRandomNumber(20)
+    let transactionExist = await Transaction.findOne({ 'transactionId': transactionId })
+    while (transactionExist) {
+        transactionId = generateRandomNumber(20)
+        transactionExist = await Transaction.findOne({ transactionId: transactionId })
+    }
+    console.log(12)
     // create new transaction and admin model
     const transactionModel = new Transaction({
-        // transactionId: transactionModel._id.toString()
+        transactionId: transactionId
     })
-    console.log(transactionModel._id.toString())
-
-    // await transactionModel.save();
-
+    console.log(123)
     const admin = new Admin({
         ...req.body,
         password: hashedPassword,
-        // transactionId: transactionModel._id.toString()
+        transactionId: transactionId
     })
 
     console.log(transactionModel)
     try {
-        //     //saving the newly created Admin and Transaction Model
-        const savedTransaction = await transactionModel.save();
-
-        console.log(await Transaction.findOne({ _id: transactionModel._id.toString()}))
-        // const savedAdmin = await admin.save();
+        //saving the newly created Admin and Transaction Model
+        await transactionModel.save();
+        await admin.save();
         console.log(savedTransaction)
-        res.status(200).json('savedAdmin')
+        res.status(200).json("Admin registration was successful")
     } catch (err) {
         console.log(err);
         res.status(500).json(err)

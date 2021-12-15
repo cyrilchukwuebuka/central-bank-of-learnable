@@ -50,8 +50,8 @@ module.exports = async (req, res) => {
         try {
             //saving the newly created user and adding the account to admin list of accounts
             const savedUser = await user.save();
-            const savedAdmin = await admin.updateOne({ $push: { accounts: userAccount } })
-            res.status(200).json({ savedAdmin, savedUser })
+            await admin.updateOne({ $push: { accounts: userAccount } })
+            res.status(200).json(savedUser)
         } catch (err) {
             console.log(err);
             res.status(400).json(err)

@@ -6,7 +6,6 @@ module.exports = async (req, res) => {
         try {
             // Get the admin from the database
             const admin = await Admin.findOne({ _id: req.admin._id });
-            console.log(admin.accounts)
 
             // fetch list of registered users
             const users = await Promise.all(

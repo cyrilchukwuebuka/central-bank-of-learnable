@@ -1,4 +1,4 @@
 # Don't track these items
 node_modules/
 .env
-package-lock.json
+coverage/

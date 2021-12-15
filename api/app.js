@@ -11,6 +11,7 @@ const adminRoute = require('./routes/admin')
 const authRoute = require('./routes/auth')
 const userRoute = require('./routes/user')
 const homeRoute = require('./routes/home')
+const pageNotFound = require('./routes/pageNotFound')
 
 //middlewares
 app.use(express.json());
@@ -23,5 +24,6 @@ app.use('/api/', homeRoute);
 app.use('/api/admin', adminRoute);
 app.use('/api/auth', authRoute);
 app.use('/api/user', userRoute);
+app.use(pageNotFound)
 
 module.exports = app;

@@ -9,7 +9,7 @@ module.exports = async (req, res) => {
         if (isNaN(amount)) {
             return res.status(400).send('Enter a valid deposit amount')
         }
-        console.log('Hello')
+        
         // get the current signed in user and increase the amount
         try {
             const validUser = await User.findOne({ _id: req.user._id });
@@ -19,12 +19,11 @@ module.exports = async (req, res) => {
                 return res.status(400).send('The User\'s account is deactivated')
             }
 
-            console.log(validUser.balance)
             // update user's account balance
             if (validUser.balance === Infinity) {
                 await validUser.updateOne({ balance: +amount })
             } else {
-                let currentBalance = Number(validUser.balance) + +amount
+                let currentBalance = Number(validUser.balance) + +amount;
                 await validUser.updateOne({ balance: currentBalance })
             }
 

@@ -1,14 +1,10 @@
 const router = require('express').Router();
 const User = require('../../models/User');
 const {
-    userRegistrationValidation,
-    loginValidation,
-    adminAccess
+    loginValidation
 } = require('../../utility/validation');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const Admin = require('../../models/Admin');
-const generateRandomNumber = require('../../utility/generateRandomNumber');
 
 module.exports = async (req, res) => {
     try {
@@ -37,7 +33,7 @@ module.exports = async (req, res) => {
         },
             process.env.AUTH_TOKEN_SECRET);
 
-        res.status(200).header('authentication-token', token).send(token);
+        res.status(200).header('authentication-token', token).json({ 'authentication-token': token });
     } catch (err) {
         console.log(err)
     }

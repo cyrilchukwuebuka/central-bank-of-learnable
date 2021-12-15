@@ -26,7 +26,7 @@ module.exports = async (req, res) => {
                             : Number(req.params.userAccount)
                     }
                 })
-            res.status(200).send(`User ${req.params.userAccount} has been deleted`);
+            res.status(200).json( user);
         } catch (err) {
             res.status(500).json(err);
         }

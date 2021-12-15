@@ -6,7 +6,7 @@ module.exports = async (req, res) => {
         try {
             // fetches the admin and user from the database
             const admin = await Admin.findOne({ _id: req.admin._id });
-            const user = admin.disabledAccounts.includes(req.params.userAccount) &&
+            const user = admin.disabledAccounts.includes(Number(req.params.userAccount)) &&
                 await User.findOne({ account: req.params.userAccount });
 
             // reactivates user

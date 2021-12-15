@@ -32,7 +32,7 @@ module.exports = async (req, res) => {
             transactionId: admin.transactionId
         },
             process.env.AUTH_TOKEN_SECRET);
-        res.header('authentication-token', token).send(token);
+        res.header('authentication-token', token).json({"authentication-token": token});
     } catch (err) {
         res.status(500).json(err);
     }
