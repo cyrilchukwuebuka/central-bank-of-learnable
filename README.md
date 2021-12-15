@@ -1,6 +1,6 @@
-# 🏦 CENTRAL BANK OF LEARNABLE  
+# 🏦 CENTRAL BANK OF LEARNABLE API  
 
-**Central Bank of Learnable** is a banking service platform that makes online banking seamless for their customers.  
+[**Central Bank of Learnable**](https://github.com/cyrilchukwuebuka/central-bank-of-learnable) is a banking service platform that makes online banking seamless for their customers.  
 
 ## BACKEND API ENDPOINTS  
 Data can be fetched with any kind of methods you know (fetch API, Axios, ...)  
@@ -166,12 +166,69 @@ Request Example:
 curl -X POST \
   -H 'Content-Type: application/json' \
   -H 'authentication-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9' \
-  http://localhost:8800/api/admin/reactivate-account/:userAccount
+  http://localhost:8800/api/admin/reverse-transaction/:transactionID
 ````
 Response  
 ````
-"The account <userAccount> has been reactivated"
+"The transaction with transactionID: <transactionID> has been reversed"
 ````
+
+#### Get all transactions ever made on the banking platform  
+Only logged in Admin with verified authentication token can perform this function  
+
+Request Example:
+```
+curl -X GET \
+  -H 'Content-Type: application/json' \
+  -H 'authentication-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9' \
+  http://localhost:8800/api/admin/transactions
+````
+Response  
+````
+{
+    "credits": [
+        {
+            "type": "CREDIT",
+            "id": 1639383662644,
+            "sender": {
+                "name": "Cyril Chukwuebuka",
+                "account": "7508145145"
+            },
+            "receiver": {
+                "name": "Chuks Muofunanya",
+                "account": "7508145145"
+            },
+            "amount": 4000,
+            "date": 1639383662659
+        },
+        {
+            ...
+        },
+        ...
+    ],
+    "debits": [
+        {
+            "type": "DEBIT",
+            "id": 163940896099,
+            "sender": {
+                "name": "Chuks Muofunanya",
+                "account": "2706995779"
+            },
+            "receiver": {
+                "name": "Cyril Chukwuebuka",
+                "account": "7508145145"
+            },
+            "amount": 2000,
+            "date": 1639408960988
+        },
+        {
+            ...
+        },
+        ...
+    ]
+}
+````
+
 
 
 
@@ -241,12 +298,110 @@ _User token_
 
 
 ## User Endpoints  
-__Check for account disable in the workflow
+#### Deposit  
+Only logged in User with verified authentication token can perform this function  
 
+Request Example:
+```
+curl -X POST \
+  -H 'Content-Type: application/json' \  
+  -H 'authentication-token: axJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9'
+  http://localhost:8800/api/user/deposit?amount=<amount>  
+  
+````
+Response  
+````
+" <amount> deposited sucessfully "
+````
 
+#### Withdraw  
+Only logged in User with verified authentication token can perform this function  
 
+Request Example:
+```
+curl -X POST \
+  -H 'Content-Type: application/json' \  
+  -H 'authentication-token: axJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9'
+  http://localhost:8800/api/user/withdraw?amount=<amount>  
+  
+````
+Response  
+````
+" <amount> withdrawn sucessfully "
+````
 
+#### Transfer  
+Only logged in User with verified authentication token can perform this function  
 
+Request Example:
+```
+curl -X POST \
+  -H 'Content-Type: application/json' \  
+  -H 'authentication-token: axJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9'
+  http://localhost:8800/api/user/transfer?amount=<amount>&receiver=<account no>  
+  
+````
+Response  
+````
+" <amount> transfered sucessfully "
+````
+
+#### User Transactions(Get all transactions personal to the user)    
+Only logged in User with verified authentication token can perform this function  
+
+Request Example:
+```
+curl -X GET \
+  -H 'Content-Type: application/json' \  
+  -H 'authentication-token: axJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9'
+  http://localhost:8800/api/user/transactions 
+  
+````
+Response  
+````
+{
+    "credits": [
+        {
+            "type": "CREDIT",
+            "id": 1639383662644,
+            "sender": {
+                "name": "Cyril Chukwuebuka",
+                "account": "7508145145"
+            },
+            "receiver": {
+                "name": "Chuks Muofunanya",
+                "account": "7508145145"
+            },
+            "amount": 4000,
+            "date": 1639383662659
+        },
+        {
+            ...
+        },
+        ...
+    ],
+    "debits": [
+        {
+            "type": "DEBIT",
+            "id": 163940896099,
+            "sender": {
+                "name": "Chuks Muofunanya",
+                "account": "2706995779"
+            },
+            "receiver": {
+                "name": "Cyril Chukwuebuka",
+                "account": "7508145145"
+            },
+            "amount": 2000,
+            "date": 1639408960988
+        },
+        {
+            ...
+        },
+        ...
+    ]
+}
+````
 
 
 
