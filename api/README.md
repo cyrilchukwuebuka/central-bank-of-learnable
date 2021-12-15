@@ -166,14 +166,14 @@ Request Example:
 curl -X POST \
   -H 'Content-Type: application/json' \
   -H 'authentication-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9' \
-  http://localhost:8800/api/admin/reactivate-account/:userAccount
+  http://localhost:8800/api/admin/reverse-transaction/:transactionID
 ````
 Response  
 ````
-"The account <userAccount> has been reactivated"
+"The transaction with transactionID: <transactionID> has been reversed"
 ````
 
-#### Get all transaction ever made  
+#### Get all transactions ever made on the banking platform  
 Only logged in Admin with verified authentication token can perform this function  
 
 Request Example:
@@ -346,7 +346,7 @@ Response
 " <amount> transfered sucessfully "
 ````
 
-#### User Transactions  
+#### User Transactions(Get all transactions personal to the user)    
 Only logged in User with verified authentication token can perform this function  
 
 Request Example:
@@ -359,7 +359,48 @@ curl -X GET \
 ````
 Response  
 ````
-
+{
+    "credits": [
+        {
+            "type": "CREDIT",
+            "id": 1639383662644,
+            "sender": {
+                "name": "Cyril Chukwuebuka",
+                "account": "7508145145"
+            },
+            "receiver": {
+                "name": "Chuks Muofunanya",
+                "account": "7508145145"
+            },
+            "amount": 4000,
+            "date": 1639383662659
+        },
+        {
+            ...
+        },
+        ...
+    ],
+    "debits": [
+        {
+            "type": "DEBIT",
+            "id": 163940896099,
+            "sender": {
+                "name": "Chuks Muofunanya",
+                "account": "2706995779"
+            },
+            "receiver": {
+                "name": "Cyril Chukwuebuka",
+                "account": "7508145145"
+            },
+            "amount": 2000,
+            "date": 1639408960988
+        },
+        {
+            ...
+        },
+        ...
+    ]
+}
 ````
 
 

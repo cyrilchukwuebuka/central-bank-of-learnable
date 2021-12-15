@@ -45,7 +45,6 @@ module.exports = async (req, res) => {
         //saving the newly created Admin and Transaction Model
         await transactionModel.save();
         await admin.save();
-        console.log(savedTransaction)
         res.status(200).json("Admin registration was successful")
     } catch (err) {
         console.log(err);

@@ -4,7 +4,7 @@ module.exports = async (req, res) => {
     if (req.user.user) {
         try {
             // get the logged in user
-            const validUser = await User.findById( req.user._id );
+            const validUser = await User.findOne({ _id: '61b69c7fe78867d2c8416e2a' });
             console.log(validUser)
             // check if user's account is active
             if (validUser.isAccountDisabled) {

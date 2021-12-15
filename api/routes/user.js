@@ -2,7 +2,7 @@ const router = require('express').Router();
 const { userAccess } = require('../utility/validation');const deposit = require('../controllers/user/deposit');
 const withdraw = require('../controllers/user/withdraw');
 const transfer = require('../controllers/user/transfer');
-const Transaction = require('../models/Transaction');
+const transactions = require('../controllers/user/transactions');
 
 // user deposit route which bears an amount query param
 router.post('/deposit', userAccess, deposit)
@@ -14,7 +14,7 @@ router.post('/withdraw', userAccess, withdraw)
 router.post('/transfer', userAccess, transfer)
 
 // user list of transactions route
-router.get('/transactions', userAccess, Transaction)
+router.get('/transactions', userAccess, transactions)
 
 module.exports = router
 

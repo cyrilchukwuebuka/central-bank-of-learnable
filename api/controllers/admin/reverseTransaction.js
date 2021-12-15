@@ -57,7 +57,7 @@ module.exports = async (req, res) => {
                 receiver.updateOne({ $push: { debit: debitTransaction } })
             ])
 
-            res.status(200).send(`The transaction with ${req.params.transactionID} has been reversed`)
+            res.status(200).send(`The transaction with transactionID: ${req.params.transactionID} has been reversed`)
         } catch (err) {
             res.status(500).json(err);
         }
