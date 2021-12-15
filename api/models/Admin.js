@@ -46,9 +46,8 @@ const AdminSchema = new mongoose.Schema({
         default: true
     },
     transactionId: {
-        type: String,
-        required: true,
-        unique: true
+        type: Number,
+        default: 0
     },
     accounts: {
         type: Array,
