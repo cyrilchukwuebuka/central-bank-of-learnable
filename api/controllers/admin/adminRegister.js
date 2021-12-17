@@ -28,12 +28,12 @@ module.exports = async (req, res) => {
         transactionId = generateRandomNumber(20)
         transactionExist = await Transaction.findOne({ transactionId: transactionId })
     }
-    console.log(12)
+    
     // create new transaction and admin model
     const transactionModel = new Transaction({
         transactionId: transactionId
     })
-    console.log(123)
+
     const admin = new Admin({
         ...req.body,
         password: hashedPassword,

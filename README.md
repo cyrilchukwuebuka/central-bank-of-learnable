@@ -1,4 +1,4 @@
-# 🏦 CENTRAL BANK OF LEARNABLE API  
+# 🏦 CENTRAL BANK OF LEARNABLE  
 
 [**Central Bank of Learnable**](https://github.com/cyrilchukwuebuka/central-bank-of-learnable) is a banking service platform that makes online banking seamless for their customers.  
 

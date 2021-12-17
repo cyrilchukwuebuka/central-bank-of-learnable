@@ -4,7 +4,7 @@
   "description": "The Central Bank of Learnable is trying to set up a platform for their banking services to make online banking seemless for their customers.",
   "main": "index.js",
   "scripts": {
-    "test": "jest --watch",
+    "test": "jest --watchAll --detectOpenHandles --runInBand",
     "start": "nodemon index.js"
   },
   "jest": {

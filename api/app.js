@@ -20,7 +20,7 @@ app.use(cors());
 app.use(helmet());
 app.use(morgan('dev'));
 
-app.use('/api/', homeRoute);
+app.use('/api', homeRoute);
 app.use('/api/admin', adminRoute);
 app.use('/api/auth', authRoute);
 app.use('/api/user', userRoute);
