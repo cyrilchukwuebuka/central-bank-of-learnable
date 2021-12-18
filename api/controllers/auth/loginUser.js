@@ -32,7 +32,6 @@ module.exports = async (req, res) => {
             transactionId: user.transactionId
         },
             process.env.AUTH_TOKEN_SECRET);
-        console.log(`{ "authentication-token": ${ token }}`)
         res.status(200).header('authentication-token', token).json({ 'authentication-token': token });
     } catch (err) {
         console.log(err)

@@ -6,7 +6,6 @@ module.exports = async (req, res) => {
         try {
             // get the logged in admin
             const admin = await Admin.findOne({ _id: req.admin._id });
-            console.log(typeof admin.transactionId)
             const transaction = await Transaction.findOne({ transactionId: admin.transactionId })
 
             // get list of all user transactions

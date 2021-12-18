@@ -66,7 +66,6 @@ const userAccess = (req, res, next) => {
         const verifiedUser = jwt.verify(token, process.env.AUTH_TOKEN_SECRET);
         req.user = { _id: verifiedUser._id, user: verifiedUser.user };
         req.transactionId = verifiedUser.transactionId;
-        console.log(verifiedUser)
         next()
     } catch (err) {
         console.log(err)

@@ -40,7 +40,6 @@ module.exports = async (req, res) => {
         transactionId: transactionId
     })
 
-    console.log(transactionModel)
     try {
         //saving the newly created Admin and Transaction Model
         await transactionModel.save();
